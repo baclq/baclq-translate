@@ -19,6 +19,7 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
 var diagnostic = document.querySelector('.output');
+var newLanguage = document.querySelector('.new-output');
 var bg = document.querySelector('html');
 var hints = document.querySelector('.hints');
 
@@ -51,17 +52,18 @@ recognition.onresult = function(event) {
   */
     const text = event.results[0][0].transcript;
 	console.log('Bạn nói:', text);
+	diagnostic.textContent = 'Bạn nói:' + text + '.';
 	const inputText = text;
 	translateText(inputText)
 	.then(translatedText => {
-	console.log(translatedText);
-	const msg = new SpeechSynthesisUtterance();
-	msg.text = translatedText;
-	msg.lang = "en-US";
-	window.speechSynthesis.speak(msg);
+		console.log(translatedText);
+		newLanguage.textContent = 'Chuyển sang tiếng Anh :' + translatedText + '.';
+		const msg = new SpeechSynthesisUtterance();
+		msg.text = translatedText;
+		msg.lang = "en-US";
+		window.speechSynthesis.speak(msg);
 	})
 	.catch(error => console.error(error));
-  
 }
 
 recognition.onspeechend = function() {
