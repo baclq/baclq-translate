@@ -20,7 +20,7 @@ h1, p {
 }
 
 div {
-  height: 350px;
+  height: 400px;
   overflow: auto;
   position: absolute;
   bottom: 0px;
