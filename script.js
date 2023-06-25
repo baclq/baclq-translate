@@ -47,6 +47,20 @@ recognition.onresult = function(event) {
   diagnostic.textContent = 'Result received: ' + color + '.';
   bg.style.backgroundColor = color;
   console.log('Confidence: ' + event.results[0][0].confidence);
+  
+    const text = event.results[0][0].transcript;
+	console.log('Bạn nói:', text);
+	const inputText = text;
+	translateText(inputText)
+	.then(translatedText => {
+	console.log(translatedText);
+	const msg = new SpeechSynthesisUtterance();
+	msg.text = translatedText;
+	msg.lang = "en-US";
+	window.speechSynthesis.speak(msg);
+	})
+	.catch(error => console.error(error));
+  
 }
 
 recognition.onspeechend = function() {
@@ -60,3 +74,11 @@ recognition.onnomatch = function(event) {
 recognition.onerror = function(event) {
   diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
 }
+
+const translateText = async (text) => {
+  const encodedText = encodeURIComponent(text);
+  const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q=${encodedText}`);
+  const data = await response.json();
+  const translatedText = data[0][0][0];
+  return translatedText;
+};
